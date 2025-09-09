@@ -1,0 +1,20 @@
+<a href="pedidos.html">Gerenciar Pedidos</a>
+
+<script>
+document.getElementById("confirmar").addEventListener("click", () => {
+    const items = [];
+    document.querySelectorAll(".item").forEach((el) => {
+        const nome = el.querySelector("h3").innerText;
+        const preco = parseFloat(el.querySelector(".price").dataset.price);
+        const qtd = parseInt(el.querySelector(".qty").value);
+        if (qtd > 0) items.push({ nome, quantidade: qtd, preco });
+    });
+
+    fetch("/pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itens: items })
+    }).then(() => alert("Pedido enviado!"))
+      .catch(() => alert("Erro ao enviar pedido"));
+});
+</script>
