@@ -1,20 +1,158 @@
-<a href="pedidos.html">Gerenciar Pedidos</a>
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-<script>
-document.getElementById("confirmar").addEventListener("click", () => {
-    const items = [];
-    document.querySelectorAll(".item").forEach((el) => {
-        const nome = el.querySelector("h3").innerText;
-        const preco = parseFloat(el.querySelector(".price").dataset.price);
-        const qtd = parseInt(el.querySelector(".qty").value);
-        if (qtd > 0) items.push({ nome, quantidade: qtd, preco });
-    });
+<head>
+    <meta charset="UTF-8">
+    <title>Seleção de Cores e Pedidos</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
 
-    fetch("/pedido", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itens: items })
-    }).then(() => alert("Pedido enviado!"))
-      .catch(() => alert("Erro ao enviar pedido"));
-});
-</script>
+        a {
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Container de cores */
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quadrado {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        .quadrado:hover {
+            transform: scale(1.1);
+        }
+
+        .verde {
+            background-color: green;
+        }
+
+        .amarelo {
+            background-color: yellow;
+        }
+
+        .vermelho {
+            background-color: red;
+        }
+
+        /* Container de itens (exemplo para pedidos) */
+        .item-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item input.qty {
+            width: 50px;
+        }
+
+        button#confirmar {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: #fff;
+            transition: background-color 0.2s;
+        }
+
+        button#confirmar:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Link para gerenciar pedidos -->
+    <a href="pedidos.html">Gerenciar Pedidos</a>
+
+    <!-- Container de seleção de cores -->
+    <div class="container">
+        <div class="quadrado verde" onclick="registrarCor('verde')"></div>
+        <div class="quadrado amarelo" onclick="registrarCor('amarelo')"></div>
+        <div class="quadrado vermelho" onclick="registrarCor('vermelho')"></div>
+    </div>
+
+    <!-- Container de itens do pedido (exemplo) -->
+    <div class="item-container">
+        <!-- Cada item teria estrutura semelhante a esta -->
+        <!--
+        <div class="item">
+            <h3>Café</h3>
+            <span class="price" data-price="5.0">R$ 5,00</span>
+            <input type="number" class="qty" value="0" min="0">
+        </div>
+        -->
+    </div>
+
+    <button id="confirmar">Confirmar Pedido</button>
+
+    <script>
+        // Função para registrar cor
+        function registrarCor(cor) {
+            fetch(`/registrar/cor=${cor}`)
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(err => console.error("Erro ao registrar cor:", err));
+        }
+
+        // Envio de pedido
+        document.getElementById("confirmar").addEventListener("click", () => {
+            const items = [];
+            document.querySelectorAll(".item").forEach((el) => {
+                const nome = el.querySelector("h3").innerText;
+                const preco = parseFloat(el.querySelector(".price").dataset.price);
+                const qtd = parseInt(el.querySelector(".qty").value);
+                if (qtd > 0) items.push({ nome, quantidade: qtd, preco });
+            });
+
+            if (items.length === 0) {
+                alert("Selecione ao menos um item para enviar o pedido!");
+                return;
+            }
+
+            fetch("/pedido", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ itens: items })
+            })
+                .then(() => alert("Pedido enviado!"))
+                .catch(() => alert("Erro ao enviar pedido"));
+        });
+    </script>
+</body>
+
+</html>

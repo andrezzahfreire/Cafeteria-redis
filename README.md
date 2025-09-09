@@ -54,7 +54,7 @@ apk add nodejs npm git
 3. Clone o projeto (supondo que esteja hospedado no GitHub):
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/andrezzahfreire/Cafeteria-redis
 cd cafeteria-redis
 ```
 
