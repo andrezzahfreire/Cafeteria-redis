@@ -55,7 +55,7 @@ apk add nodejs npm git
 
 ```bash
 git clone https://github.com/andrezzahfreire/Cafeteria-redis
-cd cafeteria-redis
+cd Cafeteria-redis
 ```
 
 4. Instale as dependências do Node.js:
